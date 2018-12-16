@@ -7,6 +7,9 @@
     "export": "next export"
   },
   "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "antd": "^3.11.2",
+    "babel-plugin-import": "^1.11.0",
     "express": "^4.16.4",
     "immutable": "^4.0.0-rc.12",
     "isomorphic-unfetch": "^3.0.0",

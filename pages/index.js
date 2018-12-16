@@ -1,8 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getAllData} from '../store/actions'
-import Examples from '../components/examples'
 import fetch from 'isomorphic-unfetch'
+import { Button } from 'antd'
 
 const Index = ({ data }) => {
   return (
@@ -12,6 +12,7 @@ const Index = ({ data }) => {
           <div key={item.id}>pack: {item.attributes.name} SSR:  {item.attributes.average}  link: <a href={item.attributes.download}>DL link</a> mirror: <a href={item.attributes.mirror}>DL link</a></div>
         ))
       }
+      <Button type="primary">Primary</Button>
     </div>
   )
 }
