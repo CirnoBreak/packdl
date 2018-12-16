@@ -3,7 +3,9 @@ import { fromJS } from 'immutable';
 
 const initialState = fromJS({
   data: [],
-  page: 1
+  page: 1,
+  search: '',
+  filterData: []
 })
 
 export const reducer = (state = initialState, action) => {
@@ -17,6 +19,14 @@ export const reducer = (state = initialState, action) => {
     case actionTypes.CHANGE_PAGE:
       console.log('page', action.page)
       return state.set('page', action.page)
+    case actionTypes.INPUT_SEARCH:
+      localStorage.setItem('page', 1);
+      // console.log(state.get('data').toJS().filter(item => item.attributes.name.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/, "").toLowerCase().includes(action.input.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/, "").toLowerCase())))
+      return state.merge({
+        search: action.input,
+        filterData: state.get('data').toJS().filter(item => item.attributes.name.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/, "").toLowerCase().includes(action.input.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/, "").toLowerCase())),
+        page: 1
+      });
     default:
       return state;
   }

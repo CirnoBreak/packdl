@@ -11,3 +11,7 @@ export const getPage = () => (dispatch) => {
 export const changePage = (page) => (dispatch) => {
   return dispatch({type: actionTypes.CHANGE_PAGE, page})
 }
+
+export const inputSearch = (input) => (dispatch) => {
+  return dispatch({ type: actionTypes.INPUT_SEARCH, input})
+}

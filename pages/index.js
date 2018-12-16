@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getAllData, getPage, changePage } from '../store/actions';
+import { getAllData, getPage, changePage, inputSearch } from '../store/actions';
 import fetch from 'isomorphic-unfetch';
+import { debounce } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { Table, Input, Row } from 'antd';
 
@@ -39,7 +40,7 @@ const columns = [
 
 let isMounted = false;
 
-function Index({ data, page, getPage, changePage }) {
+function Index({ data, page, filterData, search, getPage, changePage, inputSearch }) {
   useEffect(() => {
     if(!isMounted) {
       getPage()
@@ -48,13 +49,14 @@ function Index({ data, page, getPage, changePage }) {
   })
   
   const Search = Input.Search;
+  const renderData = !!search ? filterData : data
   return (
     <div>
       <Row type="flex" justify="end">
         <Search
           style={{ marginTop: 50, marginBottom: 20, width: 300, marginRight: 10}}
           placeholder="input the pack name."
-          
+          onSearch={(v, e) => inputSearch(v)}
           >
         </Search>
       </Row>
@@ -70,7 +72,7 @@ function Index({ data, page, getPage, changePage }) {
           }
         }}
         rowKey={record => record.id}
-        dataSource={data}
+        dataSource={renderData}
         columns={columns} />
     </div>
   )
@@ -86,14 +88,17 @@ Index.getInitialProps = async ({ store }) => {
 const mapStateToProps = (state) => {
   return {
     data: state.get('data').toJS(),
-    page: state.get('page')
+    page: state.get('page'),
+    search: state.get('search'),
+    filterData: state.get('filterData')
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getPage: bindActionCreators(getPage, dispatch),
-    changePage: bindActionCreators(changePage, dispatch)
+    changePage: bindActionCreators(changePage, dispatch),
+    inputSearch: bindActionCreators(inputSearch, dispatch)
   }
 }
 
