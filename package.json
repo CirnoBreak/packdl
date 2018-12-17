@@ -18,7 +18,6 @@
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2",
     "react-redux": "^6.0.0",
-    "react-use": "^4.11.1",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.7",
     "redux-immutable": "^4.0.0",
