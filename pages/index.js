@@ -1,40 +1,49 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import Head from '../components/head';
 import { getAllData, getPage, changePage, inputSearch } from '../store/actions';
 import fetch from 'isomorphic-unfetch';
 import { debounce } from 'lodash';
 import { bindActionCreators } from 'redux';
-import { Table, Input, Row } from 'antd';
+import { Table, Input, Row, Icon } from 'antd';
+
+const sortByAlphabet = (a, b) => {
+  return a.localeCompare(b)
+}
 
 const columns = [
   {
     title: 'pack name',
     dataIndex: 'attributes.name',
-    key: 'name'
+    key: 'name',
+    sorter: (a, b) => a.attributes.name.localeCompare(b.attributes.name),
+    defaultSortOrder: 'ascend'
   },
   {
     title: 'average',
     dataIndex: 'attributes.average',
     key: 'id',
-    render: text => <span>{Math.round(text * 100) / 100} MSD</span>
+    render: text => <span>{Math.round(text * 100) / 100} MSD</span>,
+    sorter: (a, b) => a.attributes.average - b.attributes.average > 0 ? 1 : -1
   },
   {
     title: 'size',
     dataIndex: 'attributes.size',
     key: 'size',
-    render: size => <span>{Math.round(size / 1024 / 1024 * 100) / 100} MB</span>
+    render: size => <span>{Math.round(size / 1024 / 1024 * 100) / 100} MB</span>,
+    sorter: (a, b) => a.attributes.size - b.attributes.size > 0 ? 1 : -1
   },
   {
     title: 'download',
     dataIndex: 'attributes.download',
     key: 'download',
-    render: text => <a href={text}>download</a>
+    render: text => <a href={text}><Icon style={{ fontSize: '20px', marginLeft: '20px'}} type="download" /></a>
   },
   {
     title: 'mirror',
     dataIndex: 'attributes.mirror',
     key: 'mirror',
-    render: item => <a href={item}>mirror</a>
+    render: item => <a href={item}><Icon style={{ fontSize: '20px', marginLeft: '10px'}} type="cloud-download" /></a>
   }
 ]
 
@@ -52,6 +61,7 @@ function Index({ data, page, filterData, search, getPage, changePage, inputSearc
   const renderData = !!search ? filterData : data
   return (
     <div>
+      <Head title="pack download"></Head>
       <Row type="flex" justify="end">
         <Search
           style={{ marginTop: 50, marginBottom: 20, width: 300, marginRight: 10}}

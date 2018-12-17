@@ -14,14 +14,12 @@ export const reducer = (state = initialState, action) => {
       console.log('ok')
       return state.set('data', action.data)
     case actionTypes.GET_PAGE:
-      // return state;
       return state.set('page', parseInt(localStorage.getItem('page')))
     case actionTypes.CHANGE_PAGE:
       console.log('page', action.page)
       return state.set('page', action.page)
     case actionTypes.INPUT_SEARCH:
       localStorage.setItem('page', 1);
-      // console.log(state.get('data').toJS().filter(item => item.attributes.name.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/, "").toLowerCase().includes(action.input.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/, "").toLowerCase())))
       return state.merge({
         search: action.input,
         filterData: state.get('data').toJS().filter(item => item.attributes.name.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/, "").toLowerCase().includes(action.input.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/, "").toLowerCase())),

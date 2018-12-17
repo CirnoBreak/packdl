@@ -1,5 +1,5 @@
 {
-  "name": "servertest",
+  "name": "packdl",
   "scripts": {
     "dev": "next",
     "build": "next build",
