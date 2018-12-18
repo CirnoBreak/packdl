@@ -17,7 +17,7 @@ Index.getInitialProps = async ({ store }) => {
 };
 
 // 判断DOM是否加载完
-function getIsMounted(getPage, getPageSize) {
+function useIsMounted(getPage, getPageSize) {
   // 用于模拟componentDidMount生命周期的flag
   const [isMounted, setMounted] = useState(false);
   useEffect(() => {
@@ -50,7 +50,7 @@ function Main() {
 
 // 主页组件
 function Index({ getPage, getPageSize }) {
-  let isMounted = getIsMounted(getPage, getPageSize);
+  let isMounted = useIsMounted(getPage, getPageSize);
 
   return (
     <Fragment>
