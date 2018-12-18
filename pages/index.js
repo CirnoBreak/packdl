@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import fetch from 'isomorphic-unfetch';
-import { getAllData, getPage } from '../store/actions';
+import { getAllData, getPage, getPageSize } from '../store/actions';
 import { Spin } from 'antd';
 import Head from '../components/head';
 import SearchInput from '../components/SearchInput';
@@ -17,14 +17,15 @@ Index.getInitialProps = async ({ store }) => {
 };
 
 // 判断DOM是否加载完
-function getIsMounted(getPage) {
+function getIsMounted(getPage, getPageSize) {
   // 用于模拟componentDidMount生命周期的flag
   const [isMounted, setMounted] = useState(false);
   useEffect(() => {
     // componentDidMount 生命周期获取一次localstorage的页数，纪录上次的加载
     if(!isMounted) {
-      getPage()
-      setMounted(true)
+      getPage();
+      getPageSize();
+      setMounted(true);
     }
   })
   return isMounted;
@@ -48,8 +49,8 @@ function Main() {
 }
 
 // 主页组件
-function Index({ getPage }) {
-  let isMounted = getIsMounted(getPage);
+function Index({ getPage, getPageSize }) {
+  let isMounted = getIsMounted(getPage, getPageSize);
 
   return (
     <Fragment>
@@ -67,6 +68,7 @@ function Index({ getPage }) {
 const mapDispatchToProps = (dispatch) => {
   return {
     getPage: bindActionCreators(getPage, dispatch),
+    getPageSize: bindActionCreators(getPageSize, dispatch)
   }
 };
 
