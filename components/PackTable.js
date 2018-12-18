@@ -73,7 +73,9 @@ const mapStateToProps = (state) => {
 
 /**
  * @param {function} getPage 获取当前页数
- * @param {function} changePage 改变当前页数 
+ * @param {function} getPageSize 获取每页条数
+ * @param {function} changePage 改变当前页数
+ * @param {function} changePageSize 改变每页条数
  */
 const mapDispatchToProps = (dispatch) => {
   return {

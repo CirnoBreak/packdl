@@ -7,7 +7,22 @@ const initialState = fromJS({
   search: '',
   filterData: [],
   pageSize: 10
-})
+});
+
+const searchData = (data) => {
+  return data
+    .filter(
+      item => 
+        item.attributes.name
+        .replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "")
+      .toLowerCase()
+      .includes(
+        action.input
+        .replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "")
+        .toLowerCase()
+      )
+    )
+};
 
 export const reducer = (state = initialState, action) => {
   switch(action.type) {
@@ -24,20 +39,10 @@ export const reducer = (state = initialState, action) => {
       localStorage && localStorage.setItem('pageSize', action.pageSize);
       return state.set('pageSize', action.pageSize);
     case actionTypes.INPUT_SEARCH:
-      localStorage.setItem('page', 1);
+      localStorage && localStorage.setItem('page', 1);
       return state.merge({
         search: action.input,
-        filterData: state
-                      .get('data')
-                      .toJS()
-                      .filter(
-                        item => item.attributes.name.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "")
-                        .toLowerCase()
-                        .includes(
-                          action.input.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "")
-                          .toLowerCase()
-                        )
-                      ),
+        filterData: searchData(state.get('data').toJS()),
         page: 1
       });
     default:
