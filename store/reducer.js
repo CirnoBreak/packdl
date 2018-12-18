@@ -9,7 +9,7 @@ const initialState = fromJS({
   pageSize: 10
 });
 
-const searchData = (data) => {
+const searchData = (data, input) => {
   return data
     .filter(
       item => 
@@ -17,7 +17,7 @@ const searchData = (data) => {
         .replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "")
       .toLowerCase()
       .includes(
-        action.input
+        input
         .replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "")
         .toLowerCase()
       )
@@ -42,7 +42,7 @@ export const reducer = (state = initialState, action) => {
       localStorage && localStorage.setItem('page', 1);
       return state.merge({
         search: action.input,
-        filterData: searchData(state.get('data').toJS()),
+        filterData: searchData(state.get('data').toJS(), action.input),
         page: 1
       });
     default:
