@@ -7,6 +7,7 @@ import { Row, Input } from 'antd';
 import { bindActionCreators } from 'redux';
 import { inputSearch } from '../store/actions'
 
+// 获取antd Search组件
 const Search = Input.Search;
 
 /**
@@ -26,6 +27,9 @@ function SearchInput({ inputSearch }) {
   )
 };
 
+/**
+ * @param {function} inputSearch 按下回车或者点搜索按钮后进行搜索的方法
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     inputSearch: bindActionCreators(inputSearch, dispatch)

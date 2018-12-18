@@ -5,62 +5,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getPage, changePage } from '../store/actions';
 import { bindActionCreators } from 'redux';
-import { Table, Icon } from 'antd';
-// 按字母排序
-const sortByAlphabet = (a, b) => {
-  return a.localeCompare(b);
-}
-
-// 按数字大小排序
-const sortByNumber = (a, b) => {
-  return a > b ? 1 : -1;
-}
+import { Table } from 'antd';
+import { columns } from './packTableColumns';
 
 /**
- * 渲染下载图标
- * @param {string} url 下载链接
- * @param {string} type 图标的类型，用于渲染图标
+ * 改变页数时触发的函数
+ * @param {number} page 当前选中的页数
+ * @param {function} changePage 修改页数
  */
-const renderDLIcon = (url, type) => {
-  return !!url.trim() ? <a href={url}><Icon style={{ fontSize: '20px', marginLeft: type === 'download' ? '20px' :  '35px'}} type={type} /></a>: <span>no source</span>
+function onPageChange(page, changePage) {
+  window.localStorage.setItem('page', page)
+  changePage(page)
 }
 
-// 表头
-const columns = [
-  {
-    title: 'pack name',
-    dataIndex: 'attributes.name',
-    key: 'name',
-    sorter: (a, b) => sortByAlphabet(a.attributes.name, b.attributes.name),
-    defaultSortOrder: 'ascend'
-  },
-  {
-    title: 'average',
-    dataIndex: 'attributes.average',
-    key: 'id',
-    render: text => <span>{Math.round(text * 100) / 100} MSD</span>,
-    sorter: (a, b) => sortByNumber(a.attributes.average, b.attributes.average)
-  },
-  {
-    title: 'size',
-    dataIndex: 'attributes.size',
-    key: 'size',
-    render: size => <span>{Math.round(size / 1024 / 1024 * 100) / 100} MB</span>,
-    sorter: (a, b) => sortByNumber(a.attributes.size, b.attributes.size)
-  },
-  {
-    title: 'download',
-    dataIndex: 'attributes.download',
-    key: 'download',
-    render: (url) => renderDLIcon(url, 'download')
-  },
-  {
-    title: 'google mirror',
-    dataIndex: 'attributes.mirror',
-    key: 'google mirror',
-    render: (url) => renderDLIcon(url, 'cloud-download')
-  }
-]
 /**
  * 图包表格组件
  * @param {Array} data 从后台获取的所有数据的数组
@@ -70,6 +27,14 @@ const columns = [
  * @param {function} changePage 点页码的时候触发的acion 
  */
 function PackTable({ data, page, filterData, search, changePage }) {
+  /**
+   * 表格要渲染的数据
+   * 输入搜索关键词不为空或者完全空格时为筛选的数据
+   * 否则为默认请求到的所有数据
+   * @param {string} search 搜索关键词
+   * @param {Array} filterData 搜索后筛选的数据
+   * @param {Array} data 初始化应用时请求的数据(所有)
+   */
   const renderData = !!search ? filterData : data
   return (
     <Table
@@ -78,10 +43,11 @@ function PackTable({ data, page, filterData, search, changePage }) {
         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
         showSizeChanger: true,
         current: page,
-        onChange: (e) => {
-          window.localStorage.setItem('page', e)
-          changePage(e)
-        }
+        onChange: (page) => onPageChange(page, changePage),
+        onShowSizeChange: (page, pagesize) => {
+        },
+        defaultPageSize: 10,
+        pageSizeOptions: ['10', '25', '50', '100']
       }}
       rowKey={record => record.id}
       dataSource={renderData}
@@ -89,6 +55,12 @@ function PackTable({ data, page, filterData, search, changePage }) {
   )
 }
 
+/**
+ * @param {Array} data 初始获取的所有数据
+ * @param {number} page 当前页数
+ * @param {string} search 搜索关键词
+ * @param {Array} filterData 搜索后筛选的数组  
+ */
 const mapStateToProps = (state) => {
   return {
     data: state.get('data').toJS(),
@@ -98,6 +70,10 @@ const mapStateToProps = (state) => {
   }
 };
 
+/**
+ * @param {function} getPage 获取当前页数
+ * @param {function} changePage 改变当前页数 
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     getPage: bindActionCreators(getPage, dispatch),
