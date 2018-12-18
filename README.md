@@ -1,6 +1,6 @@
 # etterna/stepmania 图包国内镜像站
 
-本站主要使用技术为next.js + react.js@16.7 + redux + react-redux + immutable，只有一个获取数据的接口(在服务器生命周期中获取)。地址: [packdl.now.sh](https://packdl.now.sh)。
+本站主要使用技术为next.js + react.js@16.7(hooks) + redux + react-redux + immutable + antd，只有一个获取数据的接口(在服务器生命周期中获取)。地址: [packdl.now.sh](https://packdl.now.sh)。
 
 # 本地运行
 
